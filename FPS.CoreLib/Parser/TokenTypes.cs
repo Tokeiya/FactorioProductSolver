@@ -2,9 +2,10 @@
 {
 	public enum TokenTypes
 	{
-		String = 1,
-		Integer,
-		Real,
-		Identifier,
+		StringLiteral = 1,
+		IntegerLiteral,
+		RealLiteral,
+		IdentifierLiteral,
+		BooleanLiteral
 	}
 }
