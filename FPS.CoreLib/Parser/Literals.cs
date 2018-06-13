@@ -4,8 +4,8 @@ using System.Text;
 
 namespace FPS.CoreLib.Parser
 {
-    public static class Literals
-    {
+	public static class Literals
+	{
 		public static Token StringLiteral { get; }
 		public static Token IntegerLiteral { get; }
 		public static Token RealLiteral { get; }
@@ -16,5 +16,5 @@ namespace FPS.CoreLib.Parser
 
 
 
-    }
+	}
 }
