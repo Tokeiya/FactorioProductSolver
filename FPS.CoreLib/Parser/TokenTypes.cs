@@ -5,7 +5,7 @@
 		StringLiteral = 1,
 		IntegerLiteral,
 		RealLiteral,
-		IdentifierLiteral,
+		Identifier,
 		BooleanLiteral
 	}
 }
