@@ -20,10 +20,10 @@ namespace FPS.CoreLibTest
 		[Fact]
 		public void AddTest()
 		{
-			var target = new TableElement(TableElement.DummyElement, "target");
-			var another = new TableElement(TableElement.DummyElement, "another");
+			var target = new TableElement("target");
+			var another = new TableElement("another");
 
-			var elem = new ValueElement(target, "elem", new TextValue("hello"));
+			var elem = new ValueElement( "elem", new TextValue("hello"));
 
 			target.Add(elem);
 			target.GedChildren().Count().Is(1);
@@ -60,22 +60,22 @@ namespace FPS.CoreLibTest
 		[Fact]
 		public void TraverseTest()
 		{
-			var root = new TableElement(TableElement.DummyElement, "root");
+			var root = new TableElement("root");
 
-			var tbl = new TableElement(root, "tbl");
-			var tbl2 = new TableElement(tbl, "tbl2");
+			var tbl = new TableElement( "tbl");
+			var tbl2 = new TableElement( "tbl2");
 
 
 			root.Add(tbl);
 			tbl.Add(tbl2);
 
-			var rootVal = new ValueElement(root, "rootVal", new TextValue("rootVal"));
+			var rootVal = new ValueElement( "rootVal", new TextValue("rootVal"));
 			root.Add(rootVal);
 
-			var tblVal = new ValueElement(tbl, "tblVal", new IntegerValue(42));
+			var tblVal = new ValueElement( "tblVal", new IntegerValue(42));
 			tbl.Add(tblVal);
 
-			var tbl2Val = new ValueElement(tbl2, "tbl2Val", new RealValue(Math.PI));
+			var tbl2Val = new ValueElement("tbl2Val", new RealValue(Math.PI));
 			tbl2.Add(tbl2Val);
 
 

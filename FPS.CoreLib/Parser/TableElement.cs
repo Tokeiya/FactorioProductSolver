@@ -7,11 +7,11 @@ namespace FPS.CoreLib.Parser
 	{
 		private readonly List<Element> _children = new List<Element>();
 
-		private TableElement() : base(null, "Root", ElementTypes.Dummy)
+		private TableElement() : base("Root", ElementTypes.Dummy)
 		{
 		}
 
-		public TableElement(TableElement parent, string identifier) : base(parent, identifier, ElementTypes.Table)
+		public TableElement(string identifier) : base(identifier, ElementTypes.Table)
 		{
 		}
 
@@ -20,7 +20,6 @@ namespace FPS.CoreLib.Parser
 		public void Add(Element child)
 		{
 			if (child == null) throw new ArgumentNullException(nameof(child));
-			if (child.Parent != this) throw new ArgumentException($"Parent mismatch.");
 			if (child == this) throw new ArgumentException("Recursion");
 			_children.Add(child);
 		}
