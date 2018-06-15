@@ -5,31 +5,36 @@ using System.Text;
 
 namespace FPS.CoreLib.Parser
 {
-	public enum ElementTypes
-	{
-		Table=1,
-		Value
-	}
-
 	public abstract class Element
 	{
-		protected Element(ElementTypes elementType)
+		protected Element(Element parent,ElementTypes elementType)
 		{
+			if (!elementType.Verify()) throw new ArgumentException($"{elementType} is unexpected value.");
+
 			Type=elementType;
+
+			if (elementType != ElementTypes.Root)
+			{
+				if (parent == null) throw new ArgumentNullException(nameof(parent));
+			}
+			else
+			{
+				if (parent != null) throw new ArgumentException("Root element can't have parent");
+			}
+
+			Parent = parent;
 		}
 
 
 		public ElementTypes Type{get;}
-	}
+		public Element Parent { get; }
 
-	public class TableElement:Element
-	{
-		public TableElement():base(ElementTypes.Table)
-		{
-			
-		}
+
+		public abstract IEnumerable<Element> GedChild();
+		public abstract IEnumerable<Element> Traverse();
 
 	}
+
 
 
 }
