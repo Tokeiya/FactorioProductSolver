@@ -173,7 +173,8 @@ namespace Parseq
 					() =>
 						Seq.Empty<T1>(),
 					pair =>
-						Seq.Concat(selector(pair.Item0), Delayed.Return(() => pair.Item1.SelectMany(selector).Force()))));
+						Seq.Concat(selector(pair.Item0),
+							Delayed.Return(() => pair.Item1.SelectMany(selector).Force()))));
 		}
 
 		public static IDelayed<ISeq<T2>> SelectMany<T0, T1, T2>(

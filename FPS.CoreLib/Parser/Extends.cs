@@ -9,10 +9,7 @@ namespace FPS.CoreLib.Parser
 		{
 			var bld = new StringBuilder();
 
-			foreach (var c in source)
-			{
-				bld.Append(c);
-			}
+			foreach (var c in source) bld.Append(c);
 
 			return bld;
 		}

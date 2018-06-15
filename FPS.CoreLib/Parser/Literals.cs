@@ -1,20 +1,10 @@
-﻿using System;
-using Parseq;
+﻿using Parseq;
 using Parseq.Combinators;
-
 
 namespace FPS.CoreLib.Parser
 {
 	public static class Literals
 	{
-		public static Parser<char,Token> StringLiteral { get; }
-		public static Parser<char, Token> IntegerLiteral { get; }
-		public static Parser<char, Token> RealLiteral { get; }
-		public static Parser<char, Token> BooleanLiteral { get; }
-		public static Parser<char, Token> Identifier { get; }
-
-		public static Parser<char, Token> Literal { get; }
-
 		static Literals()
 		{
 			IntegerLiteral = Chars.Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
@@ -37,8 +27,15 @@ namespace FPS.CoreLib.Parser
 				from following in Chars.LetterOrDigit().Many0()
 				select Token.CreateToken(TokenTypes.Identifier, first.Convert(), following);
 
-			Literal = Combinator.Choice(RealLiteral, IntegerLiteral,BooleanLiteral, StringLiteral);
+			Literal = Combinator.Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
 		}
 
+		public static Parser<char, Token> StringLiteral { get; }
+		public static Parser<char, Token> IntegerLiteral { get; }
+		public static Parser<char, Token> RealLiteral { get; }
+		public static Parser<char, Token> BooleanLiteral { get; }
+		public static Parser<char, Token> Identifier { get; }
+
+		public static Parser<char, Token> Literal { get; }
 	}
 }

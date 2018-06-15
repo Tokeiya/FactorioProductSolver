@@ -2,8 +2,8 @@
 {
 	public enum ElementTypes
 	{
-		Table=1,
+		Table = 1,
 		Value,
-		Root
+		Dummy
 	}
 }

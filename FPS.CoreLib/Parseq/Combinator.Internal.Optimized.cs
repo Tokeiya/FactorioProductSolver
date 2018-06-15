@@ -55,6 +55,7 @@ namespace Parseq
 					if (!successful)
 						return Reply.Failure<TToken, IEnumerable<T>>(resultStream, errorMessage);
 				}
+
 				return Reply.Success<TToken, IEnumerable<T>>(resultStream, resultValue);
 			};
 		}
@@ -87,6 +88,7 @@ namespace Parseq
 					if (successful)
 						return Reply.Success(resultStream, resultValue);
 				}
+
 				return Reply.Failure<TToken, T>(resultStream, errorMessage);
 			};
 		}
