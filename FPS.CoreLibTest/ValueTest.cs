@@ -58,9 +58,8 @@ namespace FPS.CoreLibTest
 			target = new BooleanValue(false);
 			target.Value.Is(false);
 			target.ValueAsObject.Is(false);
-
-
 		}
+
 
 
 

@@ -36,42 +36,6 @@ namespace FPS.CoreLib.Parser
 	}
 
 
-	public sealed class TableElement : Element
-	{
-		private readonly List<Element> _children = new List<Element>();
-
-		private TableElement() : base(null, "Root", ElementTypes.Dummy)
-		{
-		}
-
-		public TableElement(TableElement parent, string identifier) : base(parent, identifier, ElementTypes.Table)
-		{
-		}
-
-		public static TableElement DummyElement => new TableElement();
-
-		public void Add(Element child)
-		{
-			if (child == null) throw new ArgumentNullException(nameof(child));
-			_children.Add(child);
-		}
-
-		public override IEnumerable<Element> GedChildren()
-		{
-			return _children;
-		}
-
-		public override IEnumerable<Element> Traverse()
-		{
-			foreach (var elem in _children)
-			{
-				var ret = elem.Traverse();
-
-				foreach (var element in ret) yield return element;
-			}
-		}
-	}
-
 	public sealed class ValueElement : Element
 	{
 		public ValueElement(TableElement parent, string identifier, Value content) : base(parent, identifier,
