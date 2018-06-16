@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using FPS.CoreLib.Parser;
 using Parseq;
@@ -30,6 +31,59 @@ namespace FPS.CoreLibTest
 			Fail();
 		}
 
+
+		[Fact]
+		public void SimpleTest()
+		{
+			var source = "{1,2,3}";
+
+			var actual = ElementParser.TableElementParser(source.AsStream());
+
+			actual.Case(Fail, (_, elem) =>
+			{
+				var array = elem.GedChildren()
+					.Cast<ValueElement>()
+					.Select(x => x.Content)
+					.Cast<IntegerValue>()
+					.Select(x => x.Value)
+					.ToArray();
+
+				array.Length.Is(3);
+
+				array.Contains(1).IsTrue();
+				array.Contains(2).IsTrue();
+				array.Contains(3).IsTrue();
+			});
+		}
+
+		[Fact]
+		public void NestedTest()
+		{
+			var souce = "{1,2,named={10,20},{30,40}}".AsStream();
+
+			var actual = ElementParser.TableElementParser(souce);
+
+			actual.Case(Fail, (_, elem) =>
+			{
+				elem.GedChildren().Count().Is(4);
+				elem.Traverse().Count().Is(8);
+				var array = elem.Traverse().Where(x => x is ValueElement).Cast<ValueElement>()
+					.Select(x => ((IntegerValue) x.Content).Value).ToArray();
+
+				var exp = new[] {1, 2, 10, 20, 30, 40};
+
+				foreach (var i in exp)
+				{
+					array.Contains(i).IsTrue();
+				}
+
+
+
+			});
+
+
+
+		}
 
 
 
