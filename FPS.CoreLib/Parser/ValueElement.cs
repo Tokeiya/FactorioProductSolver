@@ -5,7 +5,7 @@ namespace FPS.CoreLib.Parser
 {
 	public sealed class ValueElement : Element
 	{
-		public ValueElement(string identifier, Value content) : base( identifier,
+		public ValueElement(string identifier, Value content) : base(identifier,
 			ElementTypes.Value)
 		{
 			Content = content ?? throw new ArgumentNullException(nameof(content));

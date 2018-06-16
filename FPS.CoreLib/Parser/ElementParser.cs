@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using System.Collections.Generic;
 using Parseq;
 using Parseq.Combinators;
 
@@ -13,35 +10,21 @@ namespace FPS.CoreLib.Parser
 			from _ in Chars.WhiteSpace().Many0().Ignore()
 			select Unit.Instance;
 
-		public static Parser<char, Unit> Sandwich(char value) =>
-			from _ in WhiteSpace
-			from __ in Chars.Char(value)
-			from ___ in WhiteSpace
-			select Unit.Instance;
-
-
+		public static Parser<char, Unit> Sandwich(char value)
+		{
+			return from _ in WhiteSpace
+				from __ in Chars.Char(value)
+				from ___ in WhiteSpace
+				select Unit.Instance;
+		}
 	}
 
 	public static class ElementParser
 	{
 		public static readonly Parser<char, TableElement> TableElementParser;
 
-
-
-		private static IEnumerable<Element> Merge(Element first, IEnumerable<Element> following)
-		{
-			yield return first;
-
-			foreach (var element in following)
-			{
-				yield return element;
-			}
-
-		}
-
 		static ElementParser()
 		{
-
 			Parser<char, Element> valueElementParser;
 
 			{
@@ -90,20 +73,20 @@ namespace FPS.CoreLib.Parser
 					select new TableElement(ident.Value, ctnt);
 
 
-
-
 				tableElementParser.FixedParser =
 					namedTableElementParser.Or(anonymousTableElement.Select(ctnts => new TableElement("", ctnts)));
 
 
 				TableElementParser = tableElementParser.Parse;
 			}
+		}
 
 
+		private static IEnumerable<Element> Merge(Element first, IEnumerable<Element> following)
+		{
+			yield return first;
 
-
-
-
+			foreach (var element in following) yield return element;
 		}
 	}
 }

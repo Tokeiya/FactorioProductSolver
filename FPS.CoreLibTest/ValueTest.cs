@@ -7,26 +7,24 @@ namespace FPS.CoreLibTest
 {
 	public class ValueTest
 	{
-		private readonly ITestOutputHelper _output;
-
 		public ValueTest(ITestOutputHelper output)
 		{
 			_output = output;
 		}
 
+		private readonly ITestOutputHelper _output;
+
 		[Fact]
-		public void TextValueTest()
+		public void BooleanValue()
 		{
-			var target = new TextValue("hello world");
+			var target = new BooleanValue(true);
+			target.Value.Is(true);
+			target.ValueAsObject.Is(true);
+			target.Type.Is(ValueTypes.Boolean);
 
-			target.Value.Is("hello world");
-			target.ValueAsObject.Is("hello world");
-			target.Type.Is(ValueTypes.String);
-
-			Assert.Throws<ArgumentNullException>(() =>
-			{
-				var ret = new TextValue(null);
-			});
+			target = new BooleanValue(false);
+			target.Value.Is(false);
+			target.ValueAsObject.Is(false);
 		}
 
 		[Fact]
@@ -48,21 +46,18 @@ namespace FPS.CoreLibTest
 		}
 
 		[Fact]
-		public void BooleanValue()
+		public void TextValueTest()
 		{
-			var target=new BooleanValue(true);
-			target.Value.Is(true);
-			target.ValueAsObject.Is(true);
-			target.Type.Is(ValueTypes.Boolean);
+			var target = new TextValue("hello world");
 
-			target = new BooleanValue(false);
-			target.Value.Is(false);
-			target.ValueAsObject.Is(false);
+			target.Value.Is("hello world");
+			target.ValueAsObject.Is("hello world");
+			target.Type.Is(ValueTypes.String);
+
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				var ret = new TextValue(null);
+			});
 		}
-
-
-
-
 	}
-
 }

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using FPS.CoreLib.Parser;
+﻿using FPS.CoreLib.Parser;
 using Parseq;
 using Parseq.Combinators;
 
 namespace ConsoleApp1
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
 			var hoge =
 				from _ in Chars.WhiteSpace().Many0().Ignore()
@@ -18,8 +16,6 @@ namespace ConsoleApp1
 				from ____ in Chars.WhiteSpace().Many0().Ignore()
 				from value in Literals.Literal
 				select new ValueElement(id.Value, Value.Create(value));
-
-
 		}
 	}
 }

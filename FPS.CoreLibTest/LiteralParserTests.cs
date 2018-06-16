@@ -1,4 +1,3 @@
-using System;
 using FPS.CoreLib.Parser;
 using Parseq;
 using Xunit;
@@ -6,8 +5,7 @@ using Xunit.Abstractions;
 
 namespace FPS.CoreLibTest
 {
-
-	static class Extends
+	internal static class Extends
 	{
 		public static void Test(this Parser<char, Token> target, string source, TokenTypes expectedTokenType)
 		{
@@ -48,44 +46,18 @@ namespace FPS.CoreLibTest
 			var actual = target(source.AsStream());
 
 			actual.Case((_, __) => Assert.True(true),
-				(_, __) =>
-				{
-					Assert.False(true);
-				});
+				(_, __) => { Assert.False(true); });
 		}
 	}
 
 	public class LiteralParserTest
 	{
-		private readonly ITestOutputHelper _output;
-
 		public LiteralParserTest(ITestOutputHelper output)
 		{
 			_output = output;
 		}
 
-
-		[Fact]
-		public void IntegerLiteralTest()
-		{
-			Literals.IntegerLiteral.Test("10", TokenTypes.IntegerLiteral);
-			Literals.IntegerLiteral.Test("1", TokenTypes.IntegerLiteral);
-		}
-
-		[Fact]
-		public void StringLiteralTest()
-		{
-			Literals.StringLiteral.Test("\"hello world\"","hello world", TokenTypes.StringLiteral);
-			Literals.StringLiteral.Test("\"\"", string.Empty, TokenTypes.StringLiteral);
-		}
-
-		[Fact]
-		public void RealLiteralTest()
-		{
-			Literals.RealLiteral.Test("42.195", TokenTypes.RealLiteral);
-			Literals.RealLiteral.Test("42.", TokenTypes.RealLiteral);
-			Literals.RealLiteral.FailTest(".42");
-		}
+		private readonly ITestOutputHelper _output;
 
 		[Fact]
 		public void BooleanLteralTest()
@@ -104,6 +76,14 @@ namespace FPS.CoreLibTest
 			Literals.Identifier.FailTest("");
 		}
 
+
+		[Fact]
+		public void IntegerLiteralTest()
+		{
+			Literals.IntegerLiteral.Test("10", TokenTypes.IntegerLiteral);
+			Literals.IntegerLiteral.Test("1", TokenTypes.IntegerLiteral);
+		}
+
 		[Fact]
 		public void LiteralTest()
 		{
@@ -114,14 +94,21 @@ namespace FPS.CoreLibTest
 
 			Literals.Literal.FailTest(" ");
 			Literals.Literal.FailTest("ident");
-
 		}
 
+		[Fact]
+		public void RealLiteralTest()
+		{
+			Literals.RealLiteral.Test("42.195", TokenTypes.RealLiteral);
+			Literals.RealLiteral.Test("42.", TokenTypes.RealLiteral);
+			Literals.RealLiteral.FailTest(".42");
+		}
 
-
-
-
-
+		[Fact]
+		public void StringLiteralTest()
+		{
+			Literals.StringLiteral.Test("\"hello world\"", "hello world", TokenTypes.StringLiteral);
+			Literals.StringLiteral.Test("\"\"", string.Empty, TokenTypes.StringLiteral);
+		}
 	}
-
 }

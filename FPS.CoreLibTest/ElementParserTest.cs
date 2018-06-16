@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using FPS.CoreLib.Parser;
 using Parseq;
 using Xunit;
@@ -11,24 +8,47 @@ namespace FPS.CoreLibTest
 {
 	public class ElementParserTest
 	{
-		private readonly ITestOutputHelper _output;
-
 		public ElementParserTest(ITestOutputHelper output)
 		{
 			_output = output;
 		}
+
+		private readonly ITestOutputHelper _output;
 
 		public void WriteLine(object value)
 		{
 			_output.WriteLine(value.ToString());
 		}
 
-		public static void Fail()=>Assert.False(true);
+		public static void Fail()
+		{
+			Assert.False(true);
+		}
 
 		public void Fail(ITokenStream<char> tokenStream, string message)
 		{
 			WriteLine(message);
 			Fail();
+		}
+
+		[Fact]
+		public void NestedTest()
+		{
+			var souce = "{1,2,named={10,20},{30,40}}".AsStream();
+
+			var actual = ElementParser.TableElementParser(souce);
+
+			actual.Case(Fail, (_, elem) =>
+			{
+				elem.GedChildren().Count().Is(4);
+				elem.Traverse().Count().Is(8);
+				var array = elem.Traverse().Where(x => x is ValueElement).Cast<ValueElement>()
+					.Select(x => ((IntegerValue) x.Content).Value).ToArray();
+
+				var exp = new[] {1, 2, 10, 20, 30, 40};
+
+				foreach (var i in exp) array.Contains(i).IsTrue();
+			});
 		}
 
 
@@ -55,41 +75,5 @@ namespace FPS.CoreLibTest
 				array.Contains(3).IsTrue();
 			});
 		}
-
-		[Fact]
-		public void NestedTest()
-		{
-			var souce = "{1,2,named={10,20},{30,40}}".AsStream();
-
-			var actual = ElementParser.TableElementParser(souce);
-
-			actual.Case(Fail, (_, elem) =>
-			{
-				elem.GedChildren().Count().Is(4);
-				elem.Traverse().Count().Is(8);
-				var array = elem.Traverse().Where(x => x is ValueElement).Cast<ValueElement>()
-					.Select(x => ((IntegerValue) x.Content).Value).ToArray();
-
-				var exp = new[] {1, 2, 10, 20, 30, 40};
-
-				foreach (var i in exp)
-				{
-					array.Contains(i).IsTrue();
-				}
-
-
-
-			});
-
-
-
-		}
-
-
-
-
-
-
 	}
-
 }
