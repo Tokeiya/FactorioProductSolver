@@ -5,24 +5,16 @@ namespace FPS.CoreLib.Parser
 {
 	public sealed class TableElement : Element
 	{
-		private readonly List<Element> _children = new List<Element>();
+		private readonly List<Element> _children;
 
-		private TableElement() : base("Root", ElementTypes.Dummy)
+
+		public TableElement(string identifier,IEnumerable<Element> contents) : base(identifier, ElementTypes.Table)
 		{
+			if (contents == null) throw new ArgumentNullException(nameof(contents));
+
+			_children = new List<Element>(contents);
 		}
 
-		public TableElement(string identifier) : base(identifier, ElementTypes.Table)
-		{
-		}
-
-		public static TableElement DummyElement => new TableElement();
-
-		public void Add(Element child)
-		{
-			if (child == null) throw new ArgumentNullException(nameof(child));
-			if (child == this) throw new ArgumentException("Recursion");
-			_children.Add(child);
-		}
 
 		public override IEnumerable<Element> GedChildren()
 		{

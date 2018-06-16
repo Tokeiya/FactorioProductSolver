@@ -17,66 +17,22 @@ namespace FPS.CoreLibTest
 			_output = output;
 		}
 
-		[Fact]
-		public void AddTest()
-		{
-			var target = new TableElement("target");
-			var another = new TableElement("another");
-
-			var elem = new ValueElement( "elem", new TextValue("hello"));
-
-			target.Add(elem);
-			target.GedChildren().Count().Is(1);
-
-			foreach (var act in target.GedChildren())
-			{
-				switch (act)
-				{
-					case ValueElement ve:
-						if (ve.Content is TextValue v)
-						{
-							v.Value.Is("hello");
-						}
-						else Assert.False(true);
-
-						break;
-
-					default:
-						Assert.False(true);
-						break;
-				}
-			}
-
-			Assert.Throws<ArgumentException>(() => another.Add(elem));
-			another.GedChildren().Any().IsFalse();
-
-			Assert.Throws<ArgumentException>(() => another.Add(another));
-			another.GedChildren().Any().IsFalse();
-
-		}
 
 
 
 		[Fact]
 		public void TraverseTest()
 		{
-			var root = new TableElement("root");
 
-			var tbl = new TableElement( "tbl");
-			var tbl2 = new TableElement( "tbl2");
-
-
-			root.Add(tbl);
-			tbl.Add(tbl2);
-
-			var rootVal = new ValueElement( "rootVal", new TextValue("rootVal"));
-			root.Add(rootVal);
-
-			var tblVal = new ValueElement( "tblVal", new IntegerValue(42));
-			tbl.Add(tblVal);
+			var rootVal = new ValueElement("rootVal", new TextValue("rootVal"));
+			var tblVal = new ValueElement("tblVal", new IntegerValue(42));
 
 			var tbl2Val = new ValueElement("tbl2Val", new RealValue(Math.PI));
-			tbl2.Add(tbl2Val);
+
+			var tbl2 = new TableElement("tbl2", new[] {tbl2Val});
+			var tbl = new TableElement("tbl", new Element[] {tbl2, tblVal});
+			var root=new TableElement("root",new Element[]{tbl,rootVal});
+
 
 
 			var set = new HashSet<string>();

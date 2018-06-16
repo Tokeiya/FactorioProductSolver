@@ -30,42 +30,6 @@ namespace FPS.CoreLibTest
 			Fail();
 		}
 
-		[Fact]
-		public void NamedValueElementTest()
-		{
-			var actual = ElementParser.ValueElementParser("type = \"recipe\"".AsStream());
-
-			actual.Case((_, __) => Assert.False(true), (_, elem) =>
-			{
-				if (elem is ValueElement e)
-				{
-					e.Identifier.Is("type");
-					if (elem.Content is TextValue t)
-					{
-						t.Value.Is("recipe");
-					}
-					else Assert.False(true);
-
-				}
-				else Assert.False(true);
-			});
-		}
-
-		[Fact]
-		public void AnonymousValueElementTest()
-		{
-			var actual = ElementParser.ValueElementParser("1".AsStream());
-
-			actual.Case(Fail, (_, elem) =>
-			{
-				if (elem is ValueElement e)
-				{
-					elem.Identifier.Is("");
-					elem.Content.ValueAsObject.Is(1);
-				}
-				else Fail();
-			});
-		}
 
 
 
