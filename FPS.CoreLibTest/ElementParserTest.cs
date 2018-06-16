@@ -15,7 +15,7 @@ namespace FPS.CoreLibTest
 
 		private readonly ITestOutputHelper _output;
 
-		public void WriteLine(object value)
+		private void WriteLine(object value)
 		{
 			_output.WriteLine(value.ToString());
 		}
@@ -75,5 +75,12 @@ namespace FPS.CoreLibTest
 				array.Contains(3).IsTrue();
 			});
 		}
+
+		[Fact]
+		public void AmmoTest()
+		{
+
+		}
+
 	}
 }

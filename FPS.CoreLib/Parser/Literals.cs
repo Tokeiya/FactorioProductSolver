@@ -23,8 +23,13 @@ namespace FPS.CoreLib.Parser
 			BooleanLiteral = Combinator.Choice(Chars.Sequence("true"), Chars.Sequence("false"))
 				.Select(x => Token.CreateToken(TokenTypes.BooleanLiteral, x));
 
-			Identifier = from first in Chars.Letter()
-				from following in Chars.LetterOrDigit().Many0()
+
+			var firstChar = Chars.Letter().Or(Chars.Char('_'));
+			var followingChar = Chars.LetterOrDigit().Or(Chars.Char('_'));
+
+
+			Identifier = from first in firstChar
+						 from following in followingChar.Many0()
 				select Token.CreateToken(TokenTypes.Identifier, first.Convert(), following);
 
 			Literal = Combinator.Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);

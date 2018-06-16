@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Parseq;
 using Parseq.Combinators;
 
@@ -6,9 +9,40 @@ namespace FPS.CoreLib.Parser
 {
 	public static class ParserHelper
 	{
-		public static readonly Parser<char, Unit> WhiteSpace =
-			from _ in Chars.WhiteSpace().Many0().Ignore()
-			select Unit.Instance;
+		public static bool IsSuccess<TToken, T>(this IReply<TToken, T> reply) =>
+			reply.Case((_, __) => false, (_, __) => true);
+
+
+
+		public static readonly Parser<char, Unit> WhiteSpace;
+
+		static ParserHelper()
+		{
+			Unit rep(string message)
+			{
+				Console.WriteLine(message);
+				return Unit.Instance;
+			}
+
+			var newLine = Combinator.Choice(
+				Chars.Sequence("\r\n").Ignore(),
+				Chars.Char('\r').Ignore(),
+				Chars.Char('\n').Ignore()
+			);
+
+			var comment =
+				(from _ in Chars.Sequence("--").Select(_=>rep("--"))
+					from __ in Chars.NoneOf('\r', '\n').Many0()
+					from ___ in newLine
+					select rep("called")).Many0().Select(x => Unit.Instance);
+
+			var whiteSpace =
+				from _ in Chars.WhiteSpace().Many0().Ignore()
+				select Unit.Instance;
+
+			WhiteSpace = comment.Or(whiteSpace);
+
+		}
 
 		public static Parser<char, Unit> Sandwich(char value)
 		{
@@ -22,6 +56,8 @@ namespace FPS.CoreLib.Parser
 	public static class ElementParser
 	{
 		public static readonly Parser<char, TableElement> TableElementParser;
+		public static readonly Parser<char, TableElement> RecipeParser;
+
 
 		static ElementParser()
 		{
@@ -29,15 +65,12 @@ namespace FPS.CoreLib.Parser
 
 			{
 				var namedValueElement =
-					from _ in ParserHelper.WhiteSpace
 					from id in Literals.Identifier
 					from __ in ParserHelper.Sandwich('=')
 					from value in Literals.Literal
 					select new ValueElement(id.Value, Value.Create(value));
 
 				var anonymousValueElement =
-					from _ in ParserHelper.WhiteSpace
-					from __ in Literals.Identifier.Not()
 					from value in Literals.Literal
 					select new ValueElement("", Value.Create(value));
 
@@ -48,15 +81,18 @@ namespace FPS.CoreLib.Parser
 
 			{
 				var contentParser = valueElementParser.Or(tableElementParser.Parse);
+//				var contentParser = Combinator.Or(tableElementParser.Parse, valueElementParser);
 
 				var followingParser =
 					(from _ in ParserHelper.Sandwich(',')
 						from ctnt in contentParser
 						select ctnt).Many0();
 
+
 				var tableContentsParser =
 					from first in contentParser
 					from following in followingParser
+					from _ in Chars.Char(',').Optional()
 					select Merge(first, following);
 
 				var anonymousTableElement =
@@ -79,7 +115,37 @@ namespace FPS.CoreLib.Parser
 
 				TableElementParser = tableElementParser.Parse;
 			}
+
+			var header =
+				from _ in ParserHelper.WhiteSpace
+				from __ in Chars.Sequence("data")
+				from ___ in ParserHelper.Sandwich(':')
+				from ____ in Chars.Sequence("extend")
+				from _____ in ParserHelper.Sandwich('(')
+				select Unit.Instance;
+
+			RecipeParser =
+				from _ in header
+				from table in TableElementParser
+				from __ in ParserHelper.Sandwich(')')
+				from ___ in Chars.EndOfInput()
+				select table;
+
+
+			IEnumerable<char> concat(char l, IEnumerable<char> c, char r)
+			{
+				yield return l;
+
+				foreach (var elem in c)
+				{
+					yield return elem;
+				}
+
+				yield return r;
+			}
 		}
+
+
 
 
 		private static IEnumerable<Element> Merge(Element first, IEnumerable<Element> following)

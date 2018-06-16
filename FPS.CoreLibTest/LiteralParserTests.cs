@@ -71,6 +71,7 @@ namespace FPS.CoreLibTest
 		{
 			Literals.Identifier.Test("ident", TokenTypes.Identifier);
 			Literals.Identifier.Test("i7", TokenTypes.Identifier);
+			Literals.Identifier.Test("hello_world", TokenTypes.Identifier);
 			Literals.Identifier.FailTest("7i");
 			Literals.Identifier.FailTest("10");
 			Literals.Identifier.FailTest("");

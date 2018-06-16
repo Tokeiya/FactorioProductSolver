@@ -1,4 +1,6 @@
-﻿using FPS.CoreLib.Parser;
+﻿using System;
+using System.IO;
+using FPS.CoreLib.Parser;
 using Parseq;
 using Parseq.Combinators;
 
@@ -8,14 +10,26 @@ namespace ConsoleApp1
 	{
 		private static void Main(string[] args)
 		{
-			var hoge =
-				from _ in Chars.WhiteSpace().Many0().Ignore()
-				from id in Literals.Identifier
-				from __ in Chars.WhiteSpace().Many0().Ignore()
-				from ___ in Chars.Char('=').Ignore()
-				from ____ in Chars.WhiteSpace().Many0().Ignore()
-				from value in Literals.Literal
-				select new ValueElement(id.Value, Value.Create(value));
+
+			NewMethod();
+			Console.ReadLine();
+		}
+
+		private static void NewMethod()
+		{
+			var recipe = File.ReadAllText("..\\..\\..\\..\\SampleRecipe\\sample.lua");
+
+
+			var ret = ElementParser.RecipeParser(recipe.AsStream());
+
+			ret.Case((stream, msg) =>
+			{
+				var pos = stream.Current.Value.Item1;
+
+				Console.WriteLine($"Line:{pos.Line},Col:{pos.Column}");
+
+				Console.WriteLine("fail");
+			}, (_, elem) => { Console.WriteLine("success"); });
 		}
 	}
 }
