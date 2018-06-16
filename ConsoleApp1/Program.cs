@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FPS.CoreLib.Parser;
+using Parseq;
+using Parseq.Combinators;
 
 namespace ConsoleApp1
 {
@@ -7,7 +10,16 @@ namespace ConsoleApp1
 	{
 		static void Main(string[] args)
 		{
-			Console.WriteLine(char.IsWhiteSpace('\r'));
+			var hoge =
+				from _ in Chars.WhiteSpace().Many0().Ignore()
+				from id in Literals.Identifier
+				from __ in Chars.WhiteSpace().Many0().Ignore()
+				from ___ in Chars.Char('=').Ignore()
+				from ____ in Chars.WhiteSpace().Many0().Ignore()
+				from value in Literals.Literal
+				select new ValueElement(id.Value, Value.Create(value));
+
+
 		}
 	}
 }
