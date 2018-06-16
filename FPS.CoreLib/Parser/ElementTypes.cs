@@ -4,6 +4,5 @@
 	{
 		Table = 1,
 		Value,
-		Dummy
 	}
 }
