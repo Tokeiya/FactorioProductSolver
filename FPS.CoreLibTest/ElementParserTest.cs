@@ -20,12 +20,12 @@ namespace FPS.CoreLibTest
 			_output.WriteLine(value.ToString());
 		}
 
-		public static void Fail()
+		private static void Fail()
 		{
 			Assert.False(true);
 		}
 
-		public void Fail(ITokenStream<char> tokenStream, string message)
+		private void Fail(ITokenStream<char> tokenStream, string message)
 		{
 			WriteLine(message);
 			Fail();
@@ -75,12 +75,5 @@ namespace FPS.CoreLibTest
 				array.Contains(3).IsTrue();
 			});
 		}
-
-		[Fact]
-		public void AmmoTest()
-		{
-
-		}
-
 	}
 }
