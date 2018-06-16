@@ -17,7 +17,7 @@ namespace ConsoleApp1
 
 		private static void NewMethod()
 		{
-			var recipe = File.ReadAllText("..\\..\\..\\..\\SampleRecipe\\sample.lua");
+			var recipe = File.ReadAllText("..\\..\\..\\..\\SampleRecipe\\recipe.lua");
 
 
 			var ret = ElementParser.RecipeParser(recipe.AsStream());

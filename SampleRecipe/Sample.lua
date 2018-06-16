@@ -1,4 +1,4 @@
-data:extend(
+data:extend(--comment
 {
     type = "recipe"
 }

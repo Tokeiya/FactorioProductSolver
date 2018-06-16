@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
 using Parseq;
 using Parseq.Combinators;
 
@@ -18,11 +15,6 @@ namespace FPS.CoreLib.Parser
 
 		static ParserHelper()
 		{
-			Unit rep(string message)
-			{
-				Console.WriteLine(message);
-				return Unit.Instance;
-			}
 
 			var newLine = Combinator.Choice(
 				Chars.Sequence("\r\n").Ignore(),
@@ -31,16 +23,16 @@ namespace FPS.CoreLib.Parser
 			);
 
 			var comment =
-				(from _ in Chars.Sequence("--").Select(_=>rep("--"))
-					from __ in Chars.NoneOf('\r', '\n').Many0()
-					from ___ in newLine
-					select rep("called")).Many0().Select(x => Unit.Instance);
-
-			var whiteSpace =
-				from _ in Chars.WhiteSpace().Many0().Ignore()
+				from _ in Chars.Sequence("--")
+				from __ in Chars.NoneOf('\r', '\n').Many0()
+				from ___ in newLine
 				select Unit.Instance;
 
-			WhiteSpace = comment.Or(whiteSpace);
+			var whiteSpace =
+				from _ in Chars.WhiteSpace()
+				select Unit.Instance;
+
+			WhiteSpace = whiteSpace.Or(comment).Many0().Ignore();
 
 		}
 
@@ -81,7 +73,6 @@ namespace FPS.CoreLib.Parser
 
 			{
 				var contentParser = valueElementParser.Or(tableElementParser.Parse);
-//				var contentParser = Combinator.Or(tableElementParser.Parse, valueElementParser);
 
 				var followingParser =
 					(from _ in ParserHelper.Sandwich(',')
@@ -116,6 +107,8 @@ namespace FPS.CoreLib.Parser
 				TableElementParser = tableElementParser.Parse;
 			}
 
+
+
 			var header =
 				from _ in ParserHelper.WhiteSpace
 				from __ in Chars.Sequence("data")
@@ -130,19 +123,6 @@ namespace FPS.CoreLib.Parser
 				from __ in ParserHelper.Sandwich(')')
 				from ___ in Chars.EndOfInput()
 				select table;
-
-
-			IEnumerable<char> concat(char l, IEnumerable<char> c, char r)
-			{
-				yield return l;
-
-				foreach (var elem in c)
-				{
-					yield return elem;
-				}
-
-				yield return r;
-			}
 		}
 
 
