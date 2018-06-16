@@ -33,6 +33,7 @@ namespace FPS.CoreLib.Parser
 				from ___ in whiteSpace
 				select Unit.Instance;
 
+			Parser<char, Element> valueElement;
 
 			{
 				var namedValueElement =
@@ -50,10 +51,20 @@ namespace FPS.CoreLib.Parser
 					from value in Literals.Literal
 					select new ValueElement("", Value.Create(value));
 
-				ValueElementParser = namedValueElement.Or(anonymousValueElement);
+				valueElement = namedValueElement.Or(anonymousValueElement);
 			}
 
-			var element = new FixedPoint<char, Element>("");
+			var tableElement = new FixedPoint<char, Element>("TableElement");
+
+			{
+				var content = valueElement.Or(tableElement.Parse);
+				var following = (
+					from _ in comma
+					from c in content
+					select c
+				).Many0();
+
+			}
 
 
 
