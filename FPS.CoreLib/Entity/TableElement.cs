@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FPS.CoreLib.Entity
 {
@@ -11,12 +12,16 @@ namespace FPS.CoreLib.Entity
 		public TableElement(string identifier, IEnumerable<Element> contents) : base(identifier, ElementTypes.Table)
 		{
 			if (contents == null) throw new ArgumentNullException(nameof(contents));
-
 			_children = new List<Element>(contents);
 		}
 
 
-		public override IEnumerable<Element> GedChildren()
+		public IEnumerable<Element> GedChildren(string key) =>
+			_children.Where(elem => elem.Identifier == (key ?? throw new ArgumentNullException(nameof(key))));
+
+
+
+		public IEnumerable<Element> GedChildren()
 		{
 			return _children;
 		}

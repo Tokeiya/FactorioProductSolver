@@ -14,7 +14,6 @@ namespace FPS.CoreLib.Entity
 		public Value Content { get; }
 
 
-		public override IEnumerable<Element> GedChildren() => Array.Empty<Element>();
 
 		public override IEnumerable<Element> Traverse()
 		{

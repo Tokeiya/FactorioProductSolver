@@ -19,7 +19,6 @@ namespace FPS.CoreLib.Entity
 		public string Identifier { get; }
 
 
-		public abstract IEnumerable<Element> GedChildren();
 		public abstract IEnumerable<Element> Traverse();
 	}
 }
