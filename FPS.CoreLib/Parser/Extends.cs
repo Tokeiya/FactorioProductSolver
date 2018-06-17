@@ -8,9 +8,7 @@ namespace FPS.CoreLib.Parser
 		public static StringBuilder ToStringBuilder(this IEnumerable<char> source)
 		{
 			var bld = new StringBuilder();
-
 			foreach (var c in source) bld.Append(c);
-
 			return bld;
 		}
 
@@ -18,5 +16,7 @@ namespace FPS.CoreLib.Parser
 		{
 			yield return c;
 		}
+
+
 	}
 }
