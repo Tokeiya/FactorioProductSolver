@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FPS.CoreLib.Parser;
 
-namespace FPS.CoreLib.Parser
+namespace FPS.CoreLib.Entity
 {
 	public class Token
 	{

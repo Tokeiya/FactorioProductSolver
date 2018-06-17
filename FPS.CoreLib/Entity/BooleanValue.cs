@@ -1,4 +1,6 @@
-﻿namespace FPS.CoreLib.Parser
+﻿using FPS.CoreLib.Parser;
+
+namespace FPS.CoreLib.Entity
 {
 	public sealed class BooleanValue : Value
 	{

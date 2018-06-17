@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using FPS.CoreLib.Entity;
 using FPS.CoreLib.Parser;
 using Parseq;
 using Xunit;

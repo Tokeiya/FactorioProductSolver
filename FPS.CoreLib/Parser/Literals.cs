@@ -1,4 +1,5 @@
-﻿using Parseq;
+﻿using FPS.CoreLib.Entity;
+using Parseq;
 using Parseq.Combinators;
 
 namespace FPS.CoreLib.Parser

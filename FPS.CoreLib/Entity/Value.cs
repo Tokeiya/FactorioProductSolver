@@ -1,6 +1,7 @@
 ﻿using System;
+using FPS.CoreLib.Parser;
 
-namespace FPS.CoreLib.Parser
+namespace FPS.CoreLib.Entity
 {
 	public abstract class Value
 	{

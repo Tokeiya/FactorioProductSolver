@@ -1,4 +1,4 @@
-﻿namespace FPS.CoreLib.Parser
+﻿namespace FPS.CoreLib.Entity
 {
 	public enum TokenTypes
 	{

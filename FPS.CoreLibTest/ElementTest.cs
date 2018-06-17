@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FPS.CoreLib.Entity;
 using FPS.CoreLib.Parser;
 using Xunit;
 using Xunit.Abstractions;

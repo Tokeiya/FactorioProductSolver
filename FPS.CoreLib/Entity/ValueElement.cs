@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FPS.CoreLib.Parser
+namespace FPS.CoreLib.Entity
 {
 	public sealed class ValueElement : Element
 	{
