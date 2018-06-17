@@ -2,6 +2,8 @@
 using FPS.CoreLib.Entity;
 using Parseq;
 using Parseq.Combinators;
+using static Parseq.Combinator;
+using static Parseq.Combinators.Chars;
 
 namespace FPS.CoreLib.Parser
 {
@@ -11,7 +13,7 @@ namespace FPS.CoreLib.Parser
 
 		static LuaTableParser()
 		{
-			Literal = Combinator.Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
+			Literal = Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
 
 			WhiteSpace = BuildWhiteSpace();
 			TableElementParser = BuildTableElement();
@@ -22,22 +24,22 @@ namespace FPS.CoreLib.Parser
 		public static Parser<char, TableElement> RecipeParser { get; }
 
 		public static Parser<char, Token> StringLiteral
-			=> from _ in Chars.Char('"')
-				from literal in Chars.NoneOf('"', '\\', '\r', '\n').Many0()
-				from __ in Chars.Char('"')
+			=> from _ in Char('"')
+				from literal in NoneOf('"', '\\', '\r', '\n').Many0()
+				from __ in Char('"')
 				select Token.CreateToken(TokenTypes.StringLiteral, literal);
 
 		public static Parser<char, Token> IntegerLiteral
-			=> Chars.Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
+			=> Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
 
 		public static Parser<char, Token> RealLiteral =>
-			from ip in Chars.Digit().Many1()
-			from _ in Chars.Char('.')
-			from fp in Chars.Digit().Many0()
+			from ip in Digit().Many1()
+			from _ in Char('.')
+			from fp in Digit().Many0()
 			select Token.CreateToken(TokenTypes.RealLiteral, ip, '.'.Convert(), fp);
 
 		public static Parser<char, Token> BooleanLiteral
-			=> Combinator.Choice(Chars.Sequence("true"), Chars.Sequence("false"))
+			=> Choice(Sequence("true"), Sequence("false"))
 				.Select(x => Token.CreateToken(TokenTypes.BooleanLiteral, x));
 
 		public static Parser<char, Token> Identifier => BuildIdentifier();
@@ -45,15 +47,15 @@ namespace FPS.CoreLib.Parser
 
 		private static Parser<char, Unit> BuildWhiteSpace()
 		{
-			var newLine = Combinator.Choice(
-				Chars.Sequence("\r\n").Ignore(),
-				Chars.Char('\r').Ignore(),
-				Chars.Char('\n').Ignore()
+			var newLine = Choice(
+				Sequence("\r\n").Ignore(),
+				Char('\r').Ignore(),
+				Char('\n').Ignore()
 			);
 
 			var comment =
-				from _ in Chars.Sequence("--")
-				from __ in Chars.NoneOf('\r', '\n').Many0()
+				from _ in Sequence("--")
+				from __ in NoneOf('\r', '\n').Many0()
 				from ___ in newLine
 				select Unit.Instance;
 
@@ -93,7 +95,7 @@ namespace FPS.CoreLib.Parser
 			var tableContentsParser =
 				from first in contentParser
 				from following in followingParser
-				from _ in Chars.Char(',').Optional()
+				from _ in Char(',').Optional()
 				select Merge(first, following);
 
 			var anonymousTableElement =
@@ -121,23 +123,23 @@ namespace FPS.CoreLib.Parser
 		{
 			var header =
 				from _ in WhiteSpace
-				from __ in Chars.Sequence("data")
+				from __ in Sequence("data")
 				from ___ in Sandwich(':')
-				from ____ in Chars.Sequence("extend")
+				from ____ in Sequence("extend")
 				from _____ in Sandwich('(')
 				select Unit.Instance;
 
 			return from _ in header
 				from table in TableElementParser
 				from __ in Sandwich(')')
-				from ___ in Chars.EndOfInput()
+				from ___ in EndOfInput()
 				select table;
 		}
 
 		public static Parser<char, Unit> Sandwich(char value)
 		{
 			return from _ in WhiteSpace
-				from __ in Chars.Char(value)
+				from __ in Char(value)
 				from ___ in WhiteSpace
 				select Unit.Instance;
 		}
@@ -150,8 +152,8 @@ namespace FPS.CoreLib.Parser
 
 		private static Parser<char, Token> BuildIdentifier()
 		{
-			var firstChar = Chars.Letter().Or(Chars.Char('_'));
-			var followingChar = Chars.LetterOrDigit().Or(Chars.Char('_'));
+			var firstChar = Letter().Or(Char('_'));
+			var followingChar = LetterOrDigit().Or(Char('_'));
 
 
 			return from first in firstChar
