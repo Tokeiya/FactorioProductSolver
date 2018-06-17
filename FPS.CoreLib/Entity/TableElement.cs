@@ -9,7 +9,7 @@ namespace FPS.CoreLib.Entity
 		private readonly List<Element> _children;
 
 
-		public TableElement(string identifier, IEnumerable<Element> contents) : base(identifier, ElementTypes.Table)
+		public TableElement(string identifier, IEnumerable<Element> contents) : base(identifier)
 		{
 			if (contents == null) throw new ArgumentNullException(nameof(contents));
 			_children = new List<Element>(contents);

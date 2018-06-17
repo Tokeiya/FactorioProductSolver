@@ -5,17 +5,11 @@ namespace FPS.CoreLib.Entity
 {
 	public abstract class Element
 	{
-		protected Element(string identifier, ElementTypes elementType)
+		protected Element(string identifier)
 		{
-			if (!elementType.Verify()) throw new ArgumentException($"{elementType} is unexpected value.");
-
 			Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
-
-			Type = elementType;
 		}
 
-
-		public ElementTypes Type { get; }
 		public string Identifier { get; }
 
 
