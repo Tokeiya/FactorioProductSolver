@@ -1,5 +1,4 @@
 ﻿using System;
-using FPS.CoreLib.Parser;
 
 namespace FPS.CoreLib.Entity
 {

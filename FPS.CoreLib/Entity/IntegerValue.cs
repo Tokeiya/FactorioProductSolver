@@ -1,6 +1,4 @@
-﻿using FPS.CoreLib.Parser;
-
-namespace FPS.CoreLib.Entity
+﻿namespace FPS.CoreLib.Entity
 {
 	public sealed class IntegerValue : Value
 	{

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FPS.CoreLib.Parser;
 
 namespace FPS.CoreLib.Entity
 {

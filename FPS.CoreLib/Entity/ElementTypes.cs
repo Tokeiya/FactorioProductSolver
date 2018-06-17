@@ -3,6 +3,6 @@
 	public enum ElementTypes
 	{
 		Table = 1,
-		Value,
+		Value
 	}
 }

@@ -30,7 +30,7 @@ namespace FPS.CoreLib.Parser
 
 
 			Identifier = from first in firstChar
-						 from following in followingChar.Many0()
+				from following in followingChar.Many0()
 				select Token.CreateToken(TokenTypes.Identifier, first.Convert(), following);
 
 			Literal = Combinator.Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);

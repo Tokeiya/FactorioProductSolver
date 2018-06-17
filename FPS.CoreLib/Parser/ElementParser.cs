@@ -7,10 +7,17 @@ namespace FPS.CoreLib.Parser
 {
 	public static class ElementParser
 	{
-		public static readonly Parser<char, TableElement> TableElementParser;
-		public static readonly Parser<char, TableElement> RecipeParser;
+		public static Parser<char, TableElement> TableElementParser { get; }
+		public static Parser<char, TableElement> RecipeParser { get; }
 
 		private static readonly Parser<char, Unit> WhiteSpace;
+
+		static ElementParser()
+		{
+			WhiteSpace = BuildWhiteSpace();
+			TableElementParser = BuildTableElement();
+			RecipeParser = BuildRecipe();
+		}
 
 		private static Parser<char, Unit> BuildWhiteSpace()
 		{
@@ -31,7 +38,6 @@ namespace FPS.CoreLib.Parser
 				select Unit.Instance;
 
 			return whiteSpace.Or(comment).Many0().Ignore();
-
 		}
 
 		private static Parser<char, TableElement> BuildTableElement()
@@ -85,7 +91,6 @@ namespace FPS.CoreLib.Parser
 
 
 			return tableElementParser.Parse;
-
 		}
 
 		private static Parser<char, TableElement> BuildRecipe()
@@ -105,13 +110,6 @@ namespace FPS.CoreLib.Parser
 				select table;
 		}
 
-		static ElementParser()
-		{
-			WhiteSpace = BuildWhiteSpace();
-			TableElementParser = BuildTableElement();
-			RecipeParser = BuildRecipe();
-		}
-
 
 		public static Parser<char, Unit> Sandwich(char value)
 		{
@@ -125,7 +123,6 @@ namespace FPS.CoreLib.Parser
 		private static IEnumerable<Element> Merge(Element first, IEnumerable<Element> following)
 		{
 			yield return first;
-
 			foreach (var element in following) yield return element;
 		}
 	}
