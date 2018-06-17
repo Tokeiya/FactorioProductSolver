@@ -37,7 +37,7 @@ namespace FPS.CoreLibTest
 		{
 			var souce = "{1,2,named={10,20},{30,40}}".AsStream();
 
-			var actual = ElementParser.TableElementParser(souce);
+			var actual = LuaTableParser.TableElementParser(souce);
 
 			actual.Case(Fail, (_, elem) =>
 			{
@@ -58,7 +58,7 @@ namespace FPS.CoreLibTest
 		{
 			var source = "{1,2,3}";
 
-			var actual = ElementParser.TableElementParser(source.AsStream());
+			var actual = LuaTableParser.TableElementParser(source.AsStream());
 
 			actual.Case(Fail, (_, elem) =>
 			{

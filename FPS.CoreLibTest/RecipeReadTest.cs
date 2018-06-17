@@ -28,7 +28,7 @@ namespace FPS.CoreLibTest
 			foreach (var path in files)
 			{
 				var source = File.ReadAllText(path).AsStream();
-				ElementParser.RecipeParser(source).IsSuccess().IsTrue();
+				LuaTableParser.RecipeParser(source).IsSuccess().IsTrue();
 			}
 		}
 

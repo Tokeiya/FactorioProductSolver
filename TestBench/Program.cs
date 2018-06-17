@@ -14,7 +14,7 @@ namespace TestBench
 			var dict = new Dictionary<string, int>();
 
 			var elements = Directory.GetFiles(".\\SampleRecipe")
-				.Select(p => ElementParser.RecipeParser(File.ReadAllText(p).AsStream()))
+				.Select(p => LuaTableParser.RecipeParser(File.ReadAllText(p).AsStream()))
 				.Select(x => x.Case((_, __) => throw new Exception(), (_, elem) => elem))
 				.SelectMany(x => x.GedChildren()).ToArray();
 

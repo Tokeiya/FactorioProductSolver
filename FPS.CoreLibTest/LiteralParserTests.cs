@@ -63,54 +63,54 @@ namespace FPS.CoreLibTest
 		[Fact]
 		public void BooleanLteralTest()
 		{
-			Literals.BooleanLiteral.Test("true", TokenTypes.BooleanLiteral);
-			Literals.BooleanLiteral.Test("false", TokenTypes.BooleanLiteral);
+			LuaTableParser.BooleanLiteral.Test("true", TokenTypes.BooleanLiteral);
+			LuaTableParser.BooleanLiteral.Test("false", TokenTypes.BooleanLiteral);
 		}
 
 		[Fact]
 		public void IdentifierTest()
 		{
-			Literals.Identifier.Test("ident", TokenTypes.Identifier);
-			Literals.Identifier.Test("i7", TokenTypes.Identifier);
-			Literals.Identifier.Test("hello_world", TokenTypes.Identifier);
-			Literals.Identifier.FailTest("7i");
-			Literals.Identifier.FailTest("10");
-			Literals.Identifier.FailTest("");
+			LuaTableParser.Identifier.Test("ident", TokenTypes.Identifier);
+			LuaTableParser.Identifier.Test("i7", TokenTypes.Identifier);
+			LuaTableParser.Identifier.Test("hello_world", TokenTypes.Identifier);
+			LuaTableParser.Identifier.FailTest("7i");
+			LuaTableParser.Identifier.FailTest("10");
+			LuaTableParser.Identifier.FailTest("");
 		}
 
 
 		[Fact]
 		public void IntegerLiteralTest()
 		{
-			Literals.IntegerLiteral.Test("10", TokenTypes.IntegerLiteral);
-			Literals.IntegerLiteral.Test("1", TokenTypes.IntegerLiteral);
+			LuaTableParser.IntegerLiteral.Test("10", TokenTypes.IntegerLiteral);
+			LuaTableParser.IntegerLiteral.Test("1", TokenTypes.IntegerLiteral);
 		}
 
 		[Fact]
 		public void LiteralTest()
 		{
-			Literals.Literal.Test("10", TokenTypes.IntegerLiteral);
-			Literals.Literal.Test("\"hello world\"", "hello world", TokenTypes.StringLiteral);
-			Literals.Literal.Test("42.195", TokenTypes.RealLiteral);
-			Literals.Literal.Test("true", TokenTypes.BooleanLiteral);
+			LuaTableParser.Literal.Test("10", TokenTypes.IntegerLiteral);
+			LuaTableParser.Literal.Test("\"hello world\"", "hello world", TokenTypes.StringLiteral);
+			LuaTableParser.Literal.Test("42.195", TokenTypes.RealLiteral);
+			LuaTableParser.Literal.Test("true", TokenTypes.BooleanLiteral);
 
-			Literals.Literal.FailTest(" ");
-			Literals.Literal.FailTest("ident");
+			LuaTableParser.Literal.FailTest(" ");
+			LuaTableParser.Literal.FailTest("ident");
 		}
 
 		[Fact]
 		public void RealLiteralTest()
 		{
-			Literals.RealLiteral.Test("42.195", TokenTypes.RealLiteral);
-			Literals.RealLiteral.Test("42.", TokenTypes.RealLiteral);
-			Literals.RealLiteral.FailTest(".42");
+			LuaTableParser.RealLiteral.Test("42.195", TokenTypes.RealLiteral);
+			LuaTableParser.RealLiteral.Test("42.", TokenTypes.RealLiteral);
+			LuaTableParser.RealLiteral.FailTest(".42");
 		}
 
 		[Fact]
 		public void StringLiteralTest()
 		{
-			Literals.StringLiteral.Test("\"hello world\"", "hello world", TokenTypes.StringLiteral);
-			Literals.StringLiteral.Test("\"\"", string.Empty, TokenTypes.StringLiteral);
+			LuaTableParser.StringLiteral.Test("\"hello world\"", "hello world", TokenTypes.StringLiteral);
+			LuaTableParser.StringLiteral.Test("\"\"", string.Empty, TokenTypes.StringLiteral);
 		}
 	}
 }

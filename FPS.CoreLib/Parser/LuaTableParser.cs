@@ -5,19 +5,43 @@ using Parseq.Combinators;
 
 namespace FPS.CoreLib.Parser
 {
-	public static class ElementParser
+	public static class LuaTableParser
 	{
-		public static Parser<char, TableElement> TableElementParser { get; }
-		public static Parser<char, TableElement> RecipeParser { get; }
-
 		private static readonly Parser<char, Unit> WhiteSpace;
 
-		static ElementParser()
+		static LuaTableParser()
 		{
+			Literal = Combinator.Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
+
 			WhiteSpace = BuildWhiteSpace();
 			TableElementParser = BuildTableElement();
 			RecipeParser = BuildRecipe();
 		}
+
+		public static Parser<char, TableElement> TableElementParser { get; }
+		public static Parser<char, TableElement> RecipeParser { get; }
+
+		public static Parser<char, Token> StringLiteral
+			=> from _ in Chars.Char('"')
+				from literal in Chars.NoneOf('"', '\\', '\r', '\n').Many0()
+				from __ in Chars.Char('"')
+				select Token.CreateToken(TokenTypes.StringLiteral, literal);
+
+		public static Parser<char, Token> IntegerLiteral
+			=> Chars.Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
+
+		public static Parser<char, Token> RealLiteral =>
+			from ip in Chars.Digit().Many1()
+			from _ in Chars.Char('.')
+			from fp in Chars.Digit().Many0()
+			select Token.CreateToken(TokenTypes.RealLiteral, ip, '.'.Convert(), fp);
+
+		public static Parser<char, Token> BooleanLiteral
+			=> Combinator.Choice(Chars.Sequence("true"), Chars.Sequence("false"))
+				.Select(x => Token.CreateToken(TokenTypes.BooleanLiteral, x));
+
+		public static Parser<char, Token> Identifier => BuildIdentifier();
+		public static Parser<char, Token> Literal { get; }
 
 		private static Parser<char, Unit> BuildWhiteSpace()
 		{
@@ -43,13 +67,13 @@ namespace FPS.CoreLib.Parser
 		private static Parser<char, TableElement> BuildTableElement()
 		{
 			var namedValueElement =
-				from id in Literals.Identifier
+				from id in Identifier
 				from __ in Sandwich('=')
-				from value in Literals.Literal
+				from value in Literal
 				select new ValueElement(id.Value, Value.Create(value));
 
 			var anonymousValueElement =
-				from value in Literals.Literal
+				from value in Literal
 				select new ValueElement("", Value.Create(value));
 
 			Parser<char, Element> valueElementParser = namedValueElement.Or(anonymousValueElement);
@@ -80,7 +104,7 @@ namespace FPS.CoreLib.Parser
 
 
 			var namedTableElementParser =
-				from ident in Literals.Identifier
+				from ident in Identifier
 				from _ in Sandwich('=')
 				from ctnt in anonymousTableElement
 				select new TableElement(ident.Value, ctnt);
@@ -110,7 +134,6 @@ namespace FPS.CoreLib.Parser
 				select table;
 		}
 
-
 		public static Parser<char, Unit> Sandwich(char value)
 		{
 			return from _ in WhiteSpace
@@ -119,11 +142,21 @@ namespace FPS.CoreLib.Parser
 				select Unit.Instance;
 		}
 
-
 		private static IEnumerable<Element> Merge(Element first, IEnumerable<Element> following)
 		{
 			yield return first;
 			foreach (var element in following) yield return element;
+		}
+
+		private static Parser<char, Token> BuildIdentifier()
+		{
+			var firstChar = Chars.Letter().Or(Chars.Char('_'));
+			var followingChar = Chars.LetterOrDigit().Or(Chars.Char('_'));
+
+
+			return from first in firstChar
+				from following in followingChar.Many0()
+				select Token.CreateToken(TokenTypes.Identifier, first.Convert(), following);
 		}
 	}
 }
