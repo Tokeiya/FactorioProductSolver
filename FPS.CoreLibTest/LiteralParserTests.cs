@@ -84,6 +84,7 @@ namespace FPS.CoreLibTest
 		{
 			LuaTableParser.IntegerLiteral.Test("10", TokenTypes.IntegerLiteral);
 			LuaTableParser.IntegerLiteral.Test("1", TokenTypes.IntegerLiteral);
+			LuaTableParser.IntegerLiteral.Test("-1", TokenTypes.IntegerLiteral);
 		}
 
 		[Fact]

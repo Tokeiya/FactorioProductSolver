@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FPS.CoreLib.Entity;
 using Parseq;
 using Parseq.Combinators;
@@ -13,11 +14,27 @@ namespace FPS.CoreLib.Parser
 
 		static LuaTableParser()
 		{
+			Token build(IOption<char> sign, IEnumerable<char> digit)
+			{
+				var s = sign.HasValue ? new[] {sign.Value} : Array.Empty<char>();
+				return Token.CreateToken(TokenTypes.IntegerLiteral, s, digit);
+			}
+
+			IntegerLiteral =
+				from sign in Char('-').Optional()
+				from _ in WhiteSpace
+				from digit in Digit().Many1()
+				select build(sign, digit);
+
+
 			Literal = Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
 
 			WhiteSpace = BuildWhiteSpace();
 			TableElementParser = BuildTableElement();
 			RecipeParser = BuildRecipe();
+
+
+
 		}
 
 		public static Parser<char, TableElement> TableElementParser { get; }
@@ -29,8 +46,8 @@ namespace FPS.CoreLib.Parser
 				from __ in Char('"')
 				select Token.CreateToken(TokenTypes.StringLiteral, literal);
 
-		public static Parser<char, Token> IntegerLiteral
-			=> Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
+		public static Parser<char, Token> IntegerLiteral;
+			//=> Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
 
 		public static Parser<char, Token> RealLiteral =>
 			from ip in Digit().Many1()
@@ -121,8 +138,18 @@ namespace FPS.CoreLib.Parser
 
 		private static Parser<char, TableElement> BuildRecipe()
 		{
-			var header =
+			var mtdCall =
 				from _ in WhiteSpace
+				from __ in Identifier
+				from ___ in Sandwich('(')
+				from ____ in StringLiteral
+				from _____ in Sandwich(')')
+				select Unit.Instance;
+
+
+			var header =
+				from _ in mtdCall.Optional().Ignore()
+				from ______ in WhiteSpace
 				from __ in Sequence("data")
 				from ___ in Sandwich(':')
 				from ____ in Sequence("extend")
