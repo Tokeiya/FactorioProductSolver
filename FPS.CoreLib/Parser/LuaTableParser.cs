@@ -14,17 +14,33 @@ namespace FPS.CoreLib.Parser
 
 		static LuaTableParser()
 		{
-			Token build(IOption<char> sign, IEnumerable<char> digit)
+			Token buildI(IOption<char> sign, IEnumerable<char> digit)
 			{
 				var s = sign.HasValue ? new[] {sign.Value} : Array.Empty<char>();
 				return Token.CreateToken(TokenTypes.IntegerLiteral, s, digit);
+			}
+
+			Token buildF(IOption<char> sign, IEnumerable<char> iPart, IEnumerable<char> fPart)
+			{
+				var s = sign.HasValue ? new[] { sign.Value } : Array.Empty<char>();
+
+				return Token.CreateToken(TokenTypes.RealLiteral, s, iPart, '.'.Convert(), fPart);
 			}
 
 			IntegerLiteral =
 				from sign in Char('-').Optional()
 				from _ in WhiteSpace
 				from digit in Digit().Many1()
-				select build(sign, digit);
+				select buildI(sign, digit);
+
+			RealLiteral =
+				from sign in Char('-').Optional()
+				from _ in WhiteSpace
+				from ip in Digit().Many1()
+				from __ in Char('.')
+				from fp in Digit().Many0()
+				select buildF(sign, ip, fp);
+
 
 
 			Literal = Choice(RealLiteral, IntegerLiteral, BooleanLiteral, StringLiteral);
@@ -47,13 +63,8 @@ namespace FPS.CoreLib.Parser
 				select Token.CreateToken(TokenTypes.StringLiteral, literal);
 
 		public static Parser<char, Token> IntegerLiteral;
-			//=> Digit().Many1().Select(c => Token.CreateToken(TokenTypes.IntegerLiteral, c));
 
-		public static Parser<char, Token> RealLiteral =>
-			from ip in Digit().Many1()
-			from _ in Char('.')
-			from fp in Digit().Many0()
-			select Token.CreateToken(TokenTypes.RealLiteral, ip, '.'.Convert(), fp);
+		public static Parser<char, Token> RealLiteral;
 
 		public static Parser<char, Token> BooleanLiteral
 			=> Choice(Sequence("true"), Sequence("false"))

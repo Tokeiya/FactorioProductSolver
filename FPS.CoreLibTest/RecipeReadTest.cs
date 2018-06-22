@@ -20,7 +20,7 @@ namespace FPS.CoreLibTest
 
 
 		[Fact]
-		public void ReadAllTest()
+		public void ReadAllRecipeTest()
 		{
 			var files = Directory.GetFiles(".\\SampleRecipe");
 
@@ -31,6 +31,20 @@ namespace FPS.CoreLibTest
 				LuaTableParser.RecipeParser(source).IsSuccess().IsTrue();
 			}
 		}
+
+		[Fact]
+		public void ReadAllItemTest()
+		{
+			var files = Directory.GetFiles("./ItemSample");
+
+			foreach (var path in files)
+			{
+				var source = File.ReadAllText(path).AsStream();
+				LuaTableParser.RecipeParser(source).IsSuccess().IsTrue();
+			}
+
+		}
+
 
 
 	}

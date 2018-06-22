@@ -105,6 +105,8 @@ namespace FPS.CoreLibTest
 			LuaTableParser.RealLiteral.Test("42.195", TokenTypes.RealLiteral);
 			LuaTableParser.RealLiteral.Test("42.", TokenTypes.RealLiteral);
 			LuaTableParser.RealLiteral.FailTest(".42");
+			LuaTableParser.RealLiteral.Test("-42.195", TokenTypes.RealLiteral);
+
 		}
 
 		[Fact]
